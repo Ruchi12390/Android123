@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">first</string>
+    <string name="Register">Home</string>
+    <string name="cat">Category</string>
+    <string name="pro">Profile</string>
+    <string name="failed_to_load_image">Failed to load image</string>
+    <string name="product_uploaded_successfully">Product uploaded successfully!</string>
+    <string name="failed_to_upload_product">Failed to upload product. Please try again.</string>
+    <string name="fill_all_details_and_select_image">Please fill all details and select an image</string>
+
+    <string name="register_as_buyer">Register as Buyer</string>
+    <string name="register_as_seller">Register as Seller</string>
+    <string name="category">Category</string>
+    <string name="Seller">Pots</string>
+    <string name="notifications">Notifications</string>
+</resources>
+
