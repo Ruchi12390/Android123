@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!-- For earlier versions of Android -->
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"/>
 
@@ -24,10 +24,17 @@
         android:theme="@style/Theme.First"
         tools:targetApi="31">
         <activity android:name=".ProfileActivity"/>
+        <activity android:name=".SellerDashboardActivity" />
+
         <activity android:name=".CategoryActivity"/>
+        <activity android:name=".CategoryAdapter"/>
+        <activity android:name=".ProductAdapter"/>
         <activity android:name=".DatabaseHelper"/>
         <activity android:name=".ProductListActivity"/>
         <activity android:name=".Product"/>
+        <activity android:name=".SellerSignUpActivity" />
+        <activity android:name=".ProductActivity" />
+
         <activity android:name=".ProductDetailActivity"/>
         <activity android:name=".SellerLoginActivity" />
         <activity android:name=".BuyerLoginActivity" />

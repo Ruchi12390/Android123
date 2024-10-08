@@ -12,6 +12,8 @@
     <string name="register_as_seller">Register as Seller</string>
     <string name="category">Category</string>
     <string name="Seller">Pots</string>
+    <string name="category_image">Category Image</string>
+
     <string name="notifications">Notifications</string>
 </resources>
 

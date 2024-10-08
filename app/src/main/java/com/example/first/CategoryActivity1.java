@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryActivity1 extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private ListView listView;
@@ -52,7 +52,7 @@ public class CategoryActivity extends AppCompatActivity {
             Toast.makeText(this, "No categories found", Toast.LENGTH_SHORT).show();
         } else {
             // Pass both categories and images to the adapter
-            CategoryAdapter adapter = new CategoryAdapter(this, categories, images);
+            CategoryAdapter1 adapter = new CategoryAdapter1(this, categories, images);
             listView.setAdapter(adapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,7 +70,7 @@ public class CategoryActivity extends AppCompatActivity {
         Cursor cursor = dbHelper.getProductsByCategory(category);
 
         if (cursor != null) {
-            Log.d("CategoryActivity", "Cursor count: " + cursor.getCount());
+            Log.d("CategoryActivity1", "Cursor count: " + cursor.getCount());
             if (cursor.getCount() > 0) {
                 ProductAdapter adapter = new ProductAdapter(this, cursor, 0);
                 listView.setAdapter(adapter);
@@ -78,7 +78,7 @@ public class CategoryActivity extends AppCompatActivity {
                 Toast.makeText(this, "No products found in this category", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Log.e("CategoryActivity", "Cursor is null");
+            Log.e("CategoryActivity1", "Cursor is null");
         }
     }
 }

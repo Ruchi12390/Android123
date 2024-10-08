@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,56 +7,58 @@
     android:padding="16dp"
     android:background="#FDF2E9">
 
-    <TextView
-        android:id="@+id/seller_login_title"
-        android:layout_width="wrap_content"
+    <!-- Seller Name Input Field -->
+    <EditText
+        android:id="@+id/seller_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Seller Login"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
+        android:hint="Seller Name"
+        android:padding="12dp"
+        android:background="@drawable/search_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
 
+    <!-- Email Input Field -->
     <EditText
         android:id="@+id/seller_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@id/seller_login_title"
+        android:padding="12dp"
+        android:background="@drawable/search_background"
+        app:layout_constraintTop_toBottomOf="@id/seller_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
+    <!-- Password Input Field -->
     <EditText
         android:id="@+id/seller_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
+        android:padding="12dp"
+        android:background="@drawable/search_background"
         app:layout_constraintTop_toBottomOf="@id/seller_email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
+    <!-- Sign-Up Button -->
     <Button
-        android:id="@+id/seller_login_button"
+        android:id="@+id/seller_signup_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textColor="#FFFFFF"
+        android:text="Sign Up"
         android:backgroundTint="@color/colorPrimary"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/seller_password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
 
-    <TextView
-        android:id="@+id/seller_signup_option"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Don't have an account? Sign up"
-        android:textColor="#0000FF"
-        app:layout_constraintTop_toBottomOf="@id/seller_login_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

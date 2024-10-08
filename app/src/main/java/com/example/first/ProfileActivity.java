@@ -33,19 +33,20 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setTitle("Login / Sign Up");
         builder.setMessage("Choose an option to continue:");
 
-        // Add two buttons: Login as Seller and Login as Buyer
+        // Corrected: Buyer button should open BuyerLoginActivity
         builder.setPositiveButton("Login as Buyer", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // Handle login as seller here
-                Intent intent = new Intent(ProfileActivity.this, SellerLoginActivity.class);
+                // Open BuyerLoginActivity
+                Intent intent = new Intent(ProfileActivity.this, BuyerLoginActivity.class);
                 startActivity(intent);
             }
         });
 
+        // Corrected: Seller button should open SellerLoginActivity
         builder.setNegativeButton("Login as Seller", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // Handle login as buyer here
-                Intent intent = new Intent(ProfileActivity.this, BuyerLoginActivity.class);
+                // Open SellerLoginActivity
+                Intent intent = new Intent(ProfileActivity.this, SellerLoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -54,4 +55,5 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 }
