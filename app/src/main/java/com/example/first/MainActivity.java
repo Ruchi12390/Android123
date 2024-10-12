@@ -9,17 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import android.view.View;
 
 import android.content.Intent;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.ViewGroup;
 
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private RecyclerView recyclerViewCategories;
+    private RecyclerView recyclerViewProducts; // New RecyclerView for products
 
     // Image Slider Variables
     private ImageView imageViewSlider;
@@ -32,16 +35,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize RecyclerView and DatabaseHelper
+        // Initialize DatabaseHelper
         dbHelper = new DatabaseHelper(this);
-        recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
 
-        // Set LayoutManager for horizontal scrolling
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewCategories.setLayoutManager(layoutManager);
+        // Initialize RecyclerViews
+        recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+        recyclerViewProducts = findViewById(R.id.recyclerViewProducts); // Initialize products RecyclerView
+
+        // Set LayoutManager for category RecyclerView
+        LinearLayoutManager categoryLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCategories.setLayoutManager(categoryLayoutManager);
+
+        // Set LayoutManager for products RecyclerView
+        LinearLayoutManager productLayoutManager = new LinearLayoutManager(this);
+        recyclerViewProducts.setLayoutManager(productLayoutManager);
 
         // Load categories into the RecyclerView
         loadCategories();
+
+        // Load products into the RecyclerView
+        loadProducts(); // Load products in addition to categories
 
         // Initialize Image Slider
         imageViewSlider = findViewById(R.id.imageViewSlider);
@@ -72,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 Toast.makeText(MainActivity.this, "Home clicked", Toast.LENGTH_SHORT).show();
-                // Optionally navigate to HomeActivity if needed
             } else if (item.getItemId() == R.id.nav_category) {
                 Intent categoryIntent = new Intent(MainActivity.this, CategoryActivity.class);
                 startActivity(categoryIntent);
@@ -123,5 +135,54 @@ public class MainActivity extends AppCompatActivity {
             CategoryAdapter1 adapter = new CategoryAdapter1(this, categories, images);
             recyclerViewCategories.setAdapter(adapter);
         }
+
     }
+
+    private void adjustRecyclerViewHeight(RecyclerView recyclerView) {
+        int totalHeight = 0;
+        for (int i = 0; i < recyclerView.getAdapter().getItemCount(); i++) {
+            View view = recyclerView.getLayoutManager().findViewByPosition(i);
+            if (view != null) {
+                totalHeight += view.getHeight();
+            }
+        }
+        ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+        params.height = totalHeight + (recyclerView.getHeight() * (recyclerView.getAdapter().getItemCount() - 1)); // Add margins
+        recyclerView.setLayoutParams(params);
+    }
+    private void loadUserProfile() {
+        // Navigate to SellerDashboardActivity
+        Intent intent = new Intent(MainActivity.this, SellerDashboardActivity.class);
+        startActivity(intent);
+        finish(); // Optional: Call finish() to close ProfileActivity
+    }
+
+    // Load products and display them in the RecyclerView
+    private void loadProducts() {
+        List<Product> productList = new ArrayList<>();
+
+        // Get all products from the database
+        Cursor cursor = dbHelper.getAllProducts(); // Ensure you have this method in your DatabaseHelper
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+                String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION));
+                String price = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PRICE));
+                String imageUri = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE_URI));
+
+                Product product = new Product(name, description, price, imageUri);
+                productList.add(product);
+            }
+            cursor.close();
+        }
+
+        if (productList.isEmpty()) {
+            Toast.makeText(this, "No products found", Toast.LENGTH_SHORT).show();
+        } else {
+            // Pass data to RecyclerView adapter
+            ProductAdapter1 adapter = new ProductAdapter1(this, productList);
+            recyclerViewProducts.setAdapter(adapter);
+        }
+    }
+
 }

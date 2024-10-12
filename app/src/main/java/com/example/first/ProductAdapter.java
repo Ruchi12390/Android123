@@ -61,8 +61,4 @@ public class ProductAdapter extends CursorAdapter {
                 .error(R.drawable.img) // Placeholder image if loading fails
                 .into(imageViewProduct);
     }
-
-
-
-
 }

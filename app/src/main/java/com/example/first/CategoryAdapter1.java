@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.List;
-
+import android.content.Intent;
+import android.view.View;
+import android.widget.Toast;
 public class CategoryAdapter1 extends RecyclerView.Adapter<CategoryAdapter1.CategoryViewHolder> {
 
     private Context context;
@@ -29,6 +31,8 @@ public class CategoryAdapter1 extends RecyclerView.Adapter<CategoryAdapter1.Cate
         return new CategoryViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         // Calculate the indices for the two categories in each row
@@ -39,20 +43,39 @@ public class CategoryAdapter1 extends RecyclerView.Adapter<CategoryAdapter1.Cate
         holder.textViewCategory1.setText(categories.get(firstIndex));
         Glide.with(context).load(images.get(firstIndex)).into(holder.imageViewCategory1);
 
-        // Check if there's a second category for this row
+        // Handle click for the first category
+        holder.itemView.setOnClickListener(v -> {
+            String selectedCategory = categories.get(firstIndex);
+            Toast.makeText(context, "Category clicked: " + selectedCategory, Toast.LENGTH_SHORT).show();
+
+            // Launch ProductListActivity to show products from this category
+            Intent intent = new Intent(context, ProductListActivity1.class);
+            intent.putExtra("category", selectedCategory);
+            context.startActivity(intent);
+        });
+
+        // Bind data for the second category (if exists)
         if (secondIndex < categories.size()) {
             holder.textViewCategory2.setText(categories.get(secondIndex));
             Glide.with(context).load(images.get(secondIndex)).into(holder.imageViewCategory2);
 
-            // Ensure the second category views are visible
-            holder.imageViewCategory2.setVisibility(View.VISIBLE);
-            holder.textViewCategory2.setVisibility(View.VISIBLE);
+            // Handle click for the second category
+            holder.imageViewCategory2.setOnClickListener(v -> {
+                String selectedCategory = categories.get(secondIndex);
+                Toast.makeText(context, "Category clicked: " + selectedCategory, Toast.LENGTH_SHORT).show();
+
+                // Launch ProductListActivity to show products from this category
+                Intent intent = new Intent(context, ProductListActivity.class);
+                intent.putExtra("category", selectedCategory);
+                context.startActivity(intent);
+            });
         } else {
-            // Hide the second category views if there's no second category
+            // Hide second category if it doesn't exist
             holder.imageViewCategory2.setVisibility(View.INVISIBLE);
             holder.textViewCategory2.setVisibility(View.INVISIBLE);
         }
     }
+
 
     @Override
     public int getItemCount() {

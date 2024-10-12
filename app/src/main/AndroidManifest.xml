@@ -31,15 +31,22 @@
         <activity android:name=".ProductAdapter"/>
         <activity android:name=".DatabaseHelper"/>
         <activity android:name=".ProductListActivity"/>
+        <activity android:name=".ProductListActivity1"/>
         <activity android:name=".Product"/>
         <activity android:name=".SellerSignUpActivity" />
-        <activity android:name=".ProductActivity" />
-
+        <activity android:name=".BuyerDashboardActivity" />
+        <activity android:name=".BuyerLoginActivity" />
         <activity android:name=".ProductDetailActivity"/>
         <activity android:name=".SellerLoginActivity" />
-        <activity android:name=".BuyerLoginActivity" />
+        <activity android:name=".CategoryActivity1" />
+        <activity android:name=".CategoryAdapter1" />
+        <activity android:name=".ProductAdapter1" />
+        <activity android:name=".WishlistActivity" />
+        <activity android:name=".WishlistAdapter" />
         <activity android:name=".ImageSliderAdapter" />
+        <activity android:name=".CategoryRecyclerViewAdapter"/>
         <activity android:name=".RegisterActivity">
+
 
         </activity>
         <activity

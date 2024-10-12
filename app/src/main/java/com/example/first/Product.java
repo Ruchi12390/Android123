@@ -1,28 +1,31 @@
 package com.example.first;
 
 public class Product {
-    private String productId;
     private String name;
     private String description;
-    private String category;
+    private String price;
+    private String imageUri;
 
-    // Default constructor required for calls to DataSnapshot.getValue(Product.class)
-    public Product() {}
-
-    public Product(String productId, String name, String description, String category) {
-        this.productId = productId;
+    public Product(String name, String description, String price, String imageUri) {
         this.name = name;
         this.description = description;
-        this.category = category;
+        this.price = price;
+        this.imageUri = imageUri;
     }
 
-    // Getters and Setters
-    public String getProductId() { return productId; }
-    public void setProductId(String productId) { this.productId = productId; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
 }

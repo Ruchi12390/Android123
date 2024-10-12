@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.SharedPreferences;
 
 public class SellerLoginActivity extends AppCompatActivity {
 
@@ -40,10 +41,31 @@ public class SellerLoginActivity extends AppCompatActivity {
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SellerLoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Check login in the database
+                    // Check login as a seller
                     if (databaseHelper.checkSellerLogin(email, password)) {
+                        int sellerId = databaseHelper.getSellerId(email, password);
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("SELLER_ID", sellerId);
+                        editor.apply();
+
+                        Toast.makeText(SellerLoginActivity.this, "Seller ID: " + sellerId, Toast.LENGTH_SHORT).show();
+
                         // Navigate to Seller Dashboard on successful login
                         Intent intent = new Intent(SellerLoginActivity.this, SellerDashboardActivity.class);
+                        intent.putExtra("BUYER_ID", sellerId);
+                        startActivity(intent);
+                    }
+
+
+                    // Check login as a buyer
+                    else if (databaseHelper.checkBuyerLogin(email, password)) {
+                        int buyerId = databaseHelper.getSellerId(email, password);
+                        Toast.makeText(SellerLoginActivity.this, "Buyer ID: " + buyerId, Toast.LENGTH_SHORT).show();
+
+                        // Store buyer ID as needed (e.g., in SharedPreferences)
+                        Intent intent = new Intent(SellerLoginActivity.this, SellerDashboardActivity.class);
+                        intent.putExtra("BUYER_ID", buyerId); // Pass the buyer ID to the next activity
                         startActivity(intent);
                     } else {
                         Toast.makeText(SellerLoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
 package com.example.first;
 
+import android.content.SharedPreferences;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,16 +16,28 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Find the Login / Sign Up button
-        Button loginSignupButton = findViewById(R.id.btn_login_signup);
+        // Check if the user is already logged in
+        if (!isUserLoggedIn()) {
+            // Find the Login / Sign Up button
+            Button loginSignupButton = findViewById(R.id.btn_login_signup);
 
-        // Set an OnClickListener to show dialog
-        loginSignupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLoginDialog();
-            }
-        });
+            // Set an OnClickListener to show dialog
+            loginSignupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showLoginDialog();
+                }
+            });
+        } else {
+            // User is already logged in, proceed with loading the profile
+            loadUserProfile(); // Navigate to SellerDashboardActivity
+        }
+    }
+
+    // Method to check if the user is logged in
+    private boolean isUserLoggedIn() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        return sharedPreferences.getBoolean("IS_LOGGED_IN", false); // Replace "IS_LOGGED_IN" with your key
     }
 
     // Method to show the login options dialog
@@ -33,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setTitle("Login / Sign Up");
         builder.setMessage("Choose an option to continue:");
 
-        // Corrected: Buyer button should open BuyerLoginActivity
+        // Buyer button should open BuyerLoginActivity
         builder.setPositiveButton("Login as Buyer", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Open BuyerLoginActivity
@@ -42,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        // Corrected: Seller button should open SellerLoginActivity
+        // Seller button should open SellerLoginActivity
         builder.setNegativeButton("Login as Seller", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Open SellerLoginActivity
@@ -51,9 +64,23 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        // Optional: Add a cancel button
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
         // Create and show the dialog
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
+    // Method to load user profile and navigate to SellerDashboardActivity
+    private void loadUserProfile() {
+        // Navigate to SellerDashboardActivity
+        Intent intent = new Intent(ProfileActivity.this, SellerDashboardActivity.class);
+        startActivity(intent);
+        finish(); // Optional: Call finish() to close ProfileActivity
+    }
 }
