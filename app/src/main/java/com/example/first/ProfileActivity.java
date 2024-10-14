@@ -1,5 +1,5 @@
 package com.example.first;
-
+import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,8 +16,12 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        int sellerId = sharedPreferences.getInt("BUYER_ID", -1);
+        Toast.makeText(ProfileActivity.this, "BUYER ID: " + sellerId, Toast.LENGTH_SHORT).show();
+
         // Check if the user is already logged in
-        if (!isUserLoggedIn()) {
+        if (sellerId==-1) {
             // Find the Login / Sign Up button
             Button loginSignupButton = findViewById(R.id.btn_login_signup);
 
@@ -50,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("Login as Buyer", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Open BuyerLoginActivity
-                Intent intent = new Intent(ProfileActivity.this, BuyerLoginActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, SellerLogin1.class);
                 startActivity(intent);
             }
         });

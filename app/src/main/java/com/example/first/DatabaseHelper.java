@@ -11,8 +11,8 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database name and version
-    private static final String DATABASE_NAME = "database1.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final String DATABASE_NAME = "home.db";
+    private static final int DATABASE_VERSION = 6;
 
     // Products table
     private static final String TABLE_PRODUCTS = "products";
@@ -34,6 +34,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SELLER_PASSWORD = "password";
     private static final String TABLE_WISHLIST = "wishlist";
     private static final String TABLE_CART = "cart";
+    private static final String SELLER_TABLE_SELLERS = "sellers";
+
+    // Column names
+    private static final String SELLER_COLUMN_ID = "id";
+    private static final String SELLER_COLUMN_NAME = "name";
+    private static final String SELLER_COLUMN_EMAIL = "email";
+    private static final String SELLER_COLUMN_PASSWORD = "password";
+    private static final String SELLER_COLUMN_PHONE = "phone";
+    private static final String SELLER_COLUMN_ADDRESS = "address";
 
     public static final String COLUMN_PRODUCT_ID = "product_id";
     public static final String COLUMN_BUYER_ID = "buyer_id";
@@ -41,7 +50,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PRODUCT_DESCRIPTION = "description";
     public static final String COLUMN_PRODUCT_PRICE = "price";
     // Columns for wishlist and cart
-
+    public static final String TABLE_BUYERS = "buyers";
+    public static final String BUYER_ID = "buyer_id";
+    public static final String BUYER_NAME = "buyer_name";
+    public static final String BUYER_EMAIL = "buyer_email";
+    public static final String BUYER_PHONE = "buyer_phone";
+    public static final String BUYER_ADDRESS = "buyer_address";
+    public static final String BUYER_PASSWORD = "buyer_password";
+    public static final String BUYER_UPI = "buyer_upi";
+    public static final String BUYER_BANK_ACCOUNT = "buyer_bank_account";
+    public static final String BUYER_IFSC = "buyer_ifsc";
+    public static final String BUYER_GST = "buyer_gst";
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -57,6 +76,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_CATEGORY + " TEXT,"
                 + COLUMN_PRICE + " TEXT" + ")";
         db.execSQL(CREATE_PRODUCTS_TABLE);
+        String CREATE_BUYER_TABLE = "CREATE TABLE " + TABLE_BUYERS + " (" +
+                BUYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                BUYER_NAME + " TEXT," +
+                BUYER_EMAIL + " TEXT," +
+                BUYER_PHONE + " TEXT," +
+                BUYER_ADDRESS + " TEXT," +
+                BUYER_PASSWORD + " TEXT," +
+                BUYER_UPI + " TEXT," +
+                BUYER_BANK_ACCOUNT + " TEXT," +
+                BUYER_IFSC + " TEXT," +
+                BUYER_GST + " TEXT" +
+                ")";
+        db.execSQL(CREATE_BUYER_TABLE);
 
         // Create sellers table
         String CREATE_SELLERS_TABLE = "CREATE TABLE " + TABLE_SELLERS + "("
@@ -82,6 +114,62 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d("DatabaseHelper", "Tables created successfully");
     }
+    public void addBuyer(Buyer buyer) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(BUYER_NAME, buyer.getName());
+        values.put(BUYER_EMAIL, buyer.getEmail());
+        values.put(BUYER_PHONE, buyer.getPhone());
+        values.put(BUYER_ADDRESS, buyer.getAddress());
+        values.put(BUYER_PASSWORD, buyer.getPassword());
+        values.put(BUYER_UPI, buyer.getUpi());
+        values.put(BUYER_BANK_ACCOUNT, buyer.getBankAccount());
+        values.put(BUYER_IFSC, buyer.getIfsc());
+        values.put(BUYER_GST, buyer.getGst());
+
+        // Inserting Row
+        db.insert(TABLE_BUYERS, null, values);
+        db.close(); // Closing database connection
+    }
+    public boolean loginBuyer(String email, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BUYERS + " WHERE " + BUYER_EMAIL + "=? AND " + BUYER_PASSWORD + "=?", new String[]{email, password});
+
+        boolean result = cursor.getCount() > 0; // If cursor has records, login is successful
+        cursor.close();
+        return result;
+    }
+    public boolean isProductInCart(int buyerId, int productId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_CART + " WHERE " + COLUMN_BUYER_ID + " = ? AND " + COLUMN_PRODUCT_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(buyerId), String.valueOf(productId)});
+
+        boolean isInCart = cursor.getCount() > 0; // Check if any rows exist
+        cursor.close();
+        return isInCart;
+    }
+    public long removeProductFromCart1(int buyerId, String productName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Fetch the product ID using the product name
+        int productId = getProductIdByName(productName);
+
+        if (productId != -1) {
+            return db.delete(TABLE_CART, COLUMN_BUYER_ID + " = ? AND " + COLUMN_PRODUCT_ID + " = ?",
+                    new String[]{String.valueOf(buyerId), String.valueOf(productId)});
+        }
+
+        return 0; // Return 0 if the product was not found
+    }
+
+
+
+    public long removeProductFromCart(int buyerId, int productId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_CART, COLUMN_BUYER_ID + " = ? AND " + COLUMN_PRODUCT_ID + " = ?", new String[]{String.valueOf(buyerId), String.valueOf(productId)});
+    }
+
     public ArrayList<Product> getWishlistItems(int buyerId) {
         ArrayList<Product> wishlistItems = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -116,6 +204,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return wishlistItems;
     }
+    public ArrayList<Product> getCartItems(int buyerId) {
+        ArrayList<Product> cartItems = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Adjust the query to select only the required columns from the cart
+        String query = "SELECT " + COLUMN_NAME + ", "
+                + COLUMN_DESCRIPTION + ", "
+                + COLUMN_PRICE + ", "
+                + COLUMN_IMAGE_URI
+                + " FROM " + TABLE_CART
+                + " INNER JOIN " + TABLE_PRODUCTS
+                + " ON " + TABLE_CART + "." + COLUMN_PRODUCT_ID + " = " + TABLE_PRODUCTS + "." + COLUMN_ID
+                + " WHERE " + TABLE_CART + "." + COLUMN_BUYER_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(buyerId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                String productName = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
+                String productDescription = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
+                String productPrice = cursor.getString(cursor.getColumnIndex(COLUMN_PRICE));
+                String imageUri = cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE_URI));
+
+                // Create Product object using the four-parameter constructor
+                Product product = new Product(productName, productDescription, productPrice, imageUri);
+                cartItems.add(product);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return cartItems;
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

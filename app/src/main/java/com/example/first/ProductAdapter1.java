@@ -37,6 +37,7 @@ public class ProductAdapter1 extends RecyclerView.Adapter<ProductAdapter1.Produc
 
     @Override
 
+
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.textViewName.setText(product.getName());
@@ -58,13 +59,20 @@ public class ProductAdapter1 extends RecyclerView.Adapter<ProductAdapter1.Produc
             holder.addToWishlistButton.setText("Add to Wishlist");
         }
 
-        // Set up button listeners for "Add to Wishlist" and "Add to Cart"
+        // Check if the product is already in the cart and update button text accordingly
+        if (databaseHelper.isProductInCart(currentSellerId, databaseHelper.getProductIdByName(product.getName()))) {
+            holder.addToCartButton.setText("Remove from Cart");
+        } else {
+            holder.addToCartButton.setText("Add to Cart");
+        }
+
+        // Set up button listeners for "Add to Wishlist" and "Add to Cart/Remove from Cart"
         holder.addToWishlistButton.setOnClickListener(v -> {
             addToWishlist(product, holder); // Pass the holder to update the button text
         });
 
         holder.addToCartButton.setOnClickListener(v -> {
-            addToCart(product);
+            toggleCartStatus(product, holder); // Handle add/remove from cart logic
         });
 
         // Optional: Set an OnClickListener for item clicks (e.g., open product detail activity)
@@ -72,6 +80,34 @@ public class ProductAdapter1 extends RecyclerView.Adapter<ProductAdapter1.Produc
             // Handle item click here
         });
     }
+
+    // Method to add or remove a product from the cart
+    private void toggleCartStatus(Product product, ProductViewHolder holder) {
+        int currentSellerId = getCurrentSellerId(); // Retrieve current seller ID from shared preferences
+        int productId = databaseHelper.getProductIdByName(product.getName());
+
+        // Check if the product is already in the cart
+        if (databaseHelper.isProductInCart(currentSellerId, productId)) {
+            // If the product is in the cart, remove it
+            long result = databaseHelper.removeProductFromCart(currentSellerId, productId);
+            if (result != -1) {
+                Toast.makeText(context, "Removed from Cart", Toast.LENGTH_SHORT).show();
+                holder.addToCartButton.setText("Add to Cart"); // Update button text
+            } else {
+                Toast.makeText(context, "Failed to remove from Cart", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // If the product is not in the cart, add it
+            long result = databaseHelper.addProductToCart(currentSellerId, productId);
+            if (result != -1) {
+                Toast.makeText(context, "Added to Cart", Toast.LENGTH_SHORT).show();
+                holder.addToCartButton.setText("Remove from Cart"); // Update button text
+            } else {
+                Toast.makeText(context, "Failed to add to Cart", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 
     @Override

@@ -25,7 +25,6 @@
         tools:targetApi="31">
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".SellerDashboardActivity" />
-
         <activity android:name=".CategoryActivity"/>
         <activity android:name=".CategoryAdapter"/>
         <activity android:name=".ProductAdapter"/>
@@ -35,16 +34,23 @@
         <activity android:name=".Product"/>
         <activity android:name=".SellerSignUpActivity" />
         <activity android:name=".BuyerDashboardActivity" />
-        <activity android:name=".BuyerLoginActivity" />
+
         <activity android:name=".ProductDetailActivity"/>
+        <activity android:name=".SellerLogin1"/>
+
         <activity android:name=".SellerLoginActivity" />
         <activity android:name=".CategoryActivity1" />
         <activity android:name=".CategoryAdapter1" />
         <activity android:name=".ProductAdapter1" />
         <activity android:name=".WishlistActivity" />
+        <activity android:name=".CartAdapter" />
+
+
         <activity android:name=".WishlistAdapter" />
         <activity android:name=".ImageSliderAdapter" />
-        <activity android:name=".CategoryRecyclerViewAdapter"/>
+        <activity android:name=".BuyerLoginActivity" />
+        <activity android:name=".CartActivity" />
+
         <activity android:name=".RegisterActivity">
 
 

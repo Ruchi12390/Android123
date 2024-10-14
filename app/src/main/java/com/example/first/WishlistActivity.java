@@ -1,5 +1,6 @@
 package com.example.first;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,7 +27,8 @@ public class WishlistActivity extends AppCompatActivity {
         wishlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Get the buyer ID from intent
-        int buyerId = getIntent().getIntExtra("SELLER_ID", -1);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        int buyerId = sharedPreferences.getInt("BUYER_ID", -1);
         Toast.makeText(this, "Buyer ID: " + buyerId, Toast.LENGTH_SHORT).show();
 
         // Fetch wishlist items from the database for this buyer

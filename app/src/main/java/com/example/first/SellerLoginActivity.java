@@ -17,6 +17,9 @@ public class SellerLoginActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper; // Declare DatabaseHelper
 
     @Override
+    // In SellerLoginActivity
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seller_login);
@@ -46,26 +49,23 @@ public class SellerLoginActivity extends AppCompatActivity {
                         int sellerId = databaseHelper.getSellerId(email, password);
                         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("SELLER_ID", sellerId);
+                        editor.putInt("BUYER_ID", sellerId);
+                        editor.putString("USER_ROLE", "SELLER_ID"); // Store role as SELLER_ID
+                        editor.putBoolean("IS_LOGGED_IN", true); // Set login status
                         editor.apply();
 
                         Toast.makeText(SellerLoginActivity.this, "Seller ID: " + sellerId, Toast.LENGTH_SHORT).show();
 
                         // Navigate to Seller Dashboard on successful login
                         Intent intent = new Intent(SellerLoginActivity.this, SellerDashboardActivity.class);
-                        intent.putExtra("BUYER_ID", sellerId);
+
                         startActivity(intent);
                     }
-
-
                     // Check login as a buyer
                     else if (databaseHelper.checkBuyerLogin(email, password)) {
-                        int buyerId = databaseHelper.getSellerId(email, password);
-                        Toast.makeText(SellerLoginActivity.this, "Buyer ID: " + buyerId, Toast.LENGTH_SHORT).show();
 
-                        // Store buyer ID as needed (e.g., in SharedPreferences)
-                        Intent intent = new Intent(SellerLoginActivity.this, SellerDashboardActivity.class);
-                        intent.putExtra("BUYER_ID", buyerId); // Pass the buyer ID to the next activity
+                        // Navigate to Buyer Dashboard on successful login
+                        Intent intent = new Intent(SellerLoginActivity.this, BuyerDashboardActivity.class);
                         startActivity(intent);
                     } else {
                         Toast.makeText(SellerLoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
@@ -84,4 +84,5 @@ public class SellerLoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }
