@@ -117,7 +117,7 @@ app:layout_constraintHeight_percent="0.5">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Help Center"
+        android:text="About Us"
         android:textSize="16sp"
         android:textColor="@android:color/black" />
 </LinearLayout>

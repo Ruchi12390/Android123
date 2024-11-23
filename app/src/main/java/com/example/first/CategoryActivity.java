@@ -10,11 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
+import android.widget.GridView;
 
 public class CategoryActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
-    private ListView listView;
+    private GridView gridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,44 +23,39 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
 
         dbHelper = new DatabaseHelper(this);
-        listView = findViewById(R.id.listViewCategories);
+        gridView = findViewById(R.id.gridViewCategories);
 
         loadCategories();
     }
 
     private void loadCategories() {
         List<String> categories = new ArrayList<>();
-        List<String> images = new ArrayList<>(); // For storing image URIs
+        List<String> images = new ArrayList<>();
 
-        // Get distinct categories and their images from the database
         Cursor cursor = dbHelper.getDistinctCategoriesWithImages();
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 String category = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CATEGORY));
                 String imageUri = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE_URI));
 
-                // Avoid duplicates in category list
                 if (!categories.contains(category)) {
                     categories.add(category);
-                    images.add(imageUri); // Store image URI associated with the category
+                    images.add(imageUri);
                 }
             }
-            cursor.close(); // Close the cursor after use
+            cursor.close();
         }
 
-        // Check if categories were found
         if (categories.isEmpty()) {
             Toast.makeText(this, "No categories found", Toast.LENGTH_SHORT).show();
         } else {
-            // Pass both categories and images to the adapter
             CategoryAdapter adapter = new CategoryAdapter(this, categories, images);
-            listView.setAdapter(adapter);
+            gridView.setAdapter(adapter);
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // Load products by selected category
-                    String selectedCategory = categories.get(position * 2); // Get the first category of the row
+                    String selectedCategory = categories.get(position);
                     loadProductsByCategory(selectedCategory);
                 }
             });
@@ -69,16 +65,11 @@ public class CategoryActivity extends AppCompatActivity {
     private void loadProductsByCategory(String category) {
         Cursor cursor = dbHelper.getProductsByCategory(category);
 
-        if (cursor != null) {
-            Log.d("CategoryActivity", "Cursor count: " + cursor.getCount());
-            if (cursor.getCount() > 0) {
-                ProductAdapter adapter = new ProductAdapter(this, cursor, 0);
-                listView.setAdapter(adapter);
-            } else {
-                Toast.makeText(this, "No products found in this category", Toast.LENGTH_SHORT).show();
-            }
+        if (cursor != null && cursor.getCount() > 0) {
+            ProductAdapter adapter = new ProductAdapter(this, cursor, 0);
+            gridView.setAdapter(adapter);  // Display products in the same GridView
         } else {
-            Log.e("CategoryActivity", "Cursor is null");
+            Toast.makeText(this, "No products found in this category", Toast.LENGTH_SHORT).show();
         }
     }
 }

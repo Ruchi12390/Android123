@@ -28,7 +28,7 @@ public class WishlistActivity extends AppCompatActivity {
 
         // Get the buyer ID from intent
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        int buyerId = sharedPreferences.getInt("BUYER_ID", -1);
+        int buyerId = sharedPreferences.getInt("SELLER_ID", -1);
         Toast.makeText(this, "Buyer ID: " + buyerId, Toast.LENGTH_SHORT).show();
 
         // Fetch wishlist items from the database for this buyer

@@ -18,6 +18,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         int sellerId = sharedPreferences.getInt("BUYER_ID", -1);
+
+
         Toast.makeText(ProfileActivity.this, "BUYER ID: " + sellerId, Toast.LENGTH_SHORT).show();
 
         // Check if the user is already logged in
@@ -51,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setMessage("Choose an option to continue:");
 
         // Buyer button should open BuyerLoginActivity
-        builder.setPositiveButton("Login as Buyer", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Login as Seller", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Open BuyerLoginActivity
                 Intent intent = new Intent(ProfileActivity.this, SellerLogin1.class);
@@ -60,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // Seller button should open SellerLoginActivity
-        builder.setNegativeButton("Login as Seller", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Login as Buyer", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Open SellerLoginActivity
                 Intent intent = new Intent(ProfileActivity.this, SellerLoginActivity.class);

@@ -1,5 +1,5 @@
 package com.example.first;
-
+import android.content.SharedPreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,9 +39,21 @@ public class SellerLogin1 extends AppCompatActivity {
                     // Call login method
                     boolean loginSuccess = databaseHelper.loginBuyer(email, password);
                     if (loginSuccess) {
-                        // Navigate to Seller Dashboard
-                        Intent intent = new Intent(SellerLogin1.this, SellerDashboardActivity.class);
+                        int buyerId = databaseHelper.getBuyerId(email, password);
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("SELLER_ID", buyerId);
+                        editor.putString("USER_ROLE", "SELLER_ID"); // Store role as SELLER_ID
+                        editor.putBoolean("IS_LOGGED_IN", true); // Set login status
+                        editor.apply(); // Save the changes
+                        // Navigate to Seller Dashboa
+
+                        Toast.makeText(SellerLogin1.this, "Seller ID: " + buyerId, Toast.LENGTH_SHORT).show();
+
+
+                        Intent intent = new Intent(SellerLogin1.this, SellerDashboardActivity1.class);
                         startActivity(intent);
+
                         finish(); // Optional: close the login activity
                     } else {
                         Toast.makeText(SellerLogin1.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
@@ -54,7 +66,7 @@ public class SellerLogin1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Navigate to Sign Up page
-                Intent intent = new Intent(SellerLogin1.this, SellerSignUpActivity.class);
+                Intent intent = new Intent(SellerLogin1.this, SellerSign.class);
                 startActivity(intent);
             }
         });

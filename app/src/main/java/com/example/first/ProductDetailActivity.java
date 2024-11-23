@@ -22,7 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
-
+import android.content.SharedPreferences;
 public class ProductDetailActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int STORAGE_PERMISSION_CODE = 101;
@@ -126,8 +126,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             // Convert Uri to string for database storage
             String imageUriString = imageUri.toString();
 
-            // Save product details to the database
-            long result = dbHelper.addProduct(productName, productDescription, productPrice, productCategory, imageUriString);
+            // Get seller ID from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            int sellerId = sharedPreferences.getInt("SELLER_ID", -1); // Replace "SELLER_ID" with your key
+            Toast.makeText(ProductDetailActivity.this, "Seller ID: " + sellerId, Toast.LENGTH_SHORT).show();
+
+            // Save product details to the database including seller ID
+            long result = dbHelper.addProduct(productName, productDescription, productPrice, productCategory, imageUriString, sellerId);
             if (result != -1) { // Check if insertion was successful
                 Toast.makeText(this, "Product uploaded successfully!", Toast.LENGTH_SHORT).show();
                 clearFields();
@@ -138,6 +143,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill all details and select an image", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void clearFields() {
         productNameEditText.setText("");

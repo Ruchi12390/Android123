@@ -1,6 +1,7 @@
 package com.example.first;
-import android.content.SharedPreferences;
 
+import android.content.Intent; // Import Intent
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,8 +12,8 @@ import android.widget.Toast;
 public class CartActivity extends AppCompatActivity {
 
     private RecyclerView cartRecyclerView;
-    private CartAdapter cartAdapter; // Use CartAdapter
-    private ArrayList<Product> cartItems;
+    private CartAdapter cartAdapter;
+    private ArrayList<Product1> cartItems;
     private DatabaseHelper databaseHelper;
 
     @Override
@@ -27,10 +28,11 @@ public class CartActivity extends AppCompatActivity {
         cartRecyclerView = findViewById(R.id.cart_recycler_view);
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Get the buyer ID from the intent
+        // Get the buyer ID from the shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        int buyerId = sharedPreferences.getInt("BUYER_ID", -1); // Change to BUYER_ID
-        Toast.makeText(this, "Buyer ID: " + buyerId, Toast.LENGTH_SHORT).show();
+        int buyerId = sharedPreferences.getInt("SELLER_ID", -1);
+        int seller = sharedPreferences.getInt("BUYER_ID", -1);
+        Toast.makeText(this, "Buyer ID: " +seller, Toast.LENGTH_SHORT).show();
 
         // Fetch cart items from the database for this buyer
         cartItems = databaseHelper.getCartItems(buyerId);

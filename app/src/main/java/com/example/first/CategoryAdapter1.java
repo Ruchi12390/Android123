@@ -65,7 +65,7 @@ public class CategoryAdapter1 extends RecyclerView.Adapter<CategoryAdapter1.Cate
                 Toast.makeText(context, "Category clicked: " + selectedCategory, Toast.LENGTH_SHORT).show();
 
                 // Launch ProductListActivity to show products from this category
-                Intent intent = new Intent(context, ProductListActivity.class);
+                Intent intent = new Intent(context, ProductListActivity1.class);
                 intent.putExtra("category", selectedCategory);
                 context.startActivity(intent);
             });

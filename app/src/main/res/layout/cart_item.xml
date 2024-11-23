@@ -72,9 +72,9 @@
         android:contentDescription="Decrease Quantity"
         android:src="@drawable/img_8"
         android:scaleType="center"
-    app:layout_constraintStart_toEndOf="@id/quantity_label"
-    app:layout_constraintTop_toTopOf="@id/quantity_label"
-    app:layout_constraintBottom_toBottomOf="@id/quantity_label"/>
+        app:layout_constraintStart_toEndOf="@id/quantity_label"
+        app:layout_constraintTop_toTopOf="@id/quantity_label"
+        app:layout_constraintBottom_toBottomOf="@id/quantity_label"/>
 
     <TextView
         android:id="@+id/cart_product_quantity"
@@ -95,9 +95,9 @@
         android:contentDescription="Increase Quantity"
         android:src="@drawable/img_9"
         android:scaleType="center"
-    app:layout_constraintStart_toEndOf="@id/cart_product_quantity"
-    app:layout_constraintTop_toTopOf="@id/cart_product_quantity"
-    app:layout_constraintBottom_toBottomOf="@id/cart_product_quantity"/>
+        app:layout_constraintStart_toEndOf="@id/cart_product_quantity"
+        app:layout_constraintTop_toTopOf="@id/cart_product_quantity"
+        app:layout_constraintBottom_toBottomOf="@id/cart_product_quantity"/>
 
     <Button
         android:id="@+id/btn_remove"
@@ -108,6 +108,19 @@
         android:backgroundTint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_increment"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Pay Now Button -->
+    <Button
+        android:id="@+id/btn_placeOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Order"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/black"
+        app:layout_constraintEnd_toStartOf="@id/btn_remove"
+        app:layout_constraintTop_toBottomOf="@id/btn_increment"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

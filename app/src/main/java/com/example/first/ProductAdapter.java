@@ -22,8 +22,6 @@ import com.bumptech.glide.load.DataSource;
 
 public class ProductAdapter extends CursorAdapter {
 
-    private static final String TAG = "ProductAdapter";
-
     public ProductAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
     }
@@ -35,30 +33,19 @@ public class ProductAdapter extends CursorAdapter {
     }
 
     @Override
-
-
-
-
     public void bindView(View view, Context context, Cursor cursor) {
-        Log.d("ProductAdapter", "bindView called");
-
         TextView textViewProduct = view.findViewById(R.id.textViewProduct);
         ImageView imageViewProduct = view.findViewById(R.id.imageViewProduct);
 
-        String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-        String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-        String imageUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME));
+        String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
+        String imageUri = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_IMAGE_URI));
 
         textViewProduct.setText(name + " - " + description);
 
-        // Log the URI to ensure it's correctly saved
-        Log.d("ProductAdapter", "Image URI: " + imageUri);
-
-        // Load the image using Glide
         Glide.with(context)
-                .load(Uri.parse(imageUri)) // Make sure the URI is correctly parsed
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .error(R.drawable.img) // Placeholder image if loading fails
+                .load(Uri.parse(imageUri))
+                .error(R.drawable.img)  // Placeholder if image load fails
                 .into(imageViewProduct);
     }
 }

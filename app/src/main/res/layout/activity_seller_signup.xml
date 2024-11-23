@@ -12,7 +12,7 @@
         android:id="@+id/seller_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Seller Name"
+        android:hint="Name"
         android:padding="12dp"
         android:background="@drawable/search_background"
         app:layout_constraintTop_toTopOf="parent"

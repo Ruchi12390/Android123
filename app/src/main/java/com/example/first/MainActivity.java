@@ -96,16 +96,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Setup "Select Image" button to open product detail activity
-        Button selectImageButton = findViewById(R.id.btn_upload_image);
-        selectImageButton.setOnClickListener(v -> {
-            try {
-                Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
-                startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
     // Load categories and display them in the RecyclerView
